@@ -43,12 +43,14 @@ if (isset($_POST['textUrl'])) {
     $text = file_get_contents($_POST['textUrl']);
 }
 
-
+//Find out the position of keywords in the text
 if (strlen($text) > 0 && strlen($_POST['searchQuery']) > 0) {
     $keywords = preg_split("/[\s,]+/", $_POST['searchQuery']);
     for ($i = 0; $i < count($keywords); $i++) {
+
         $allpos[] = strpos_all($text, $keywords[$i]);
         $numElement[] = count($allpos[$i]);
+
     }
 }
 ?>
@@ -85,8 +87,13 @@ if (strlen($text) > 0 && strlen($_POST['searchQuery']) > 0) {
                         echo "<p class='step-title'><span class='tag tag-blue'>Keyword: </span><i>$keywords[$i]</i></p>";
                         echo "<div class='xx'>";
                         for ($j = 1; $j <= $numElement[$i]; $j++) {
+                            if ($j % 10 == 0 ){
+                                echo "<div class='xx'>";
+                                echo "</div>";
+                            }
                             $id = $keywords[$i] . '-' . ($j - 1);
                             echo "<a href=#$id class='button-primary-outlined'>$j</a>";
+
                         }
                         echo "</div>";
                         echo "</div>";
@@ -101,8 +108,7 @@ if (strlen($text) > 0 && strlen($_POST['searchQuery']) > 0) {
     <div class="col col-sm-7" style="padding-left: 25px;">
         <pre><code>
            <?php
-
-
+           //Display text and write text in a file
            if (strlen($text) > 0 && empty($_POST["searchQuery"])) {
                $fp = fopen("text.txt", "w");
                if ($fp) {
@@ -112,6 +118,8 @@ if (strlen($text) > 0 && strlen($_POST['searchQuery']) > 0) {
                echo $text;
            }
 
+
+           //Find all keywords in the text and replace them
            if (strlen($text) > 0 && strlen($_POST['searchQuery']) > 0) {
                for ($i = 0; $i < count($keywords); $i++) {
                    $offset = 0;
